@@ -1,4 +1,4 @@
---[[Six Soft aim]]
+--[[intellect Soft aim]]
 
 --\\ S A
 local Aiming = loadstring(game:HttpGet(("https://raw.githubusercontent.com/ftEclipse/Slient/main/SilentEclipseScript.Lua"), true))()
@@ -9,24 +9,25 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
-local EclipseSets = {
+local intellect = {
     SilentAim = true,
     Prediction = 0.125443282, --[[0.133, 0.125443282 | best Predictions ]]
 }
-getgenv().EclipseSets = EclipseSets
+getgenv().intellect = intellect
 
---\\ AA RS
-RunService.Heartbeat:Connect(function()
-    pcall(function()
-        for i,v in pairs(game.Players:GetChildren()) do
-            if v.Name ~= game.Players.LocalPlayer.Name then
-                local hrp = v.Character.HumanoidRootPart
-                 hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
-            end
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+
+mouse.KeyDown:Connect(function(key)
+    if key == "t" then
+        if intellect.SilentAim == false then
+        intellect.SilentAim = true
+        else
+        intellect.SilentAim = false
         end
-    end)
+    end
 end)
+
 
 function Aiming.Check()
     if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
@@ -48,10 +49,10 @@ local oldIndex = nil
 oldIndex = hookmetamethod(game, "__index", function(self, Index)
     if self == Mouse and not checkcaller() then 
         local SelectedPart = Aiming.SelectedPart
-        if DaHoodSettings.SilentAim and Index == "Hit" or Index == "Target" then
+        if intellect.SilentAim and Index == "Hit" or Index == "Target" then
             
             if SelectedPart then
-                local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * EclipseSets.Prediction)
+                local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * intellect.Prediction)
                 if Index == "Hit" then
                     return Hit
                 elseif Index == "Target" then
@@ -64,44 +65,13 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
 end)
 
 RunService:BindToRenderStep("AimLock", 0, function()
-    if (EclipseSets.AimLock and Aiming.Check() and UserInputService:IsKeyDown(EclipseSets.AimLockKeybind)) then
+    if (intellect.AimLock and Aiming.Check() and UserInputService:IsKeyDown(intellect.AimLockKeybind)) then
         local SelectedPart = Aiming.SelectedPart
 
-        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * EclipseSets.Prediction)
+        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * intellect.Prediction)
 
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
-end)
-
-local RunService = game:GetService("RunService")
---\\ AA RS (repeat btw) KEEP!!!!!
-RunService.Heartbeat:Connect(function()
-    pcall(function()
-        for i,v in pairs(game.Players:GetChildren()) do
-            if v.Name ~= game.Players.LocalPlayer.Name then
-                local hrp = v.Character.HumanoidRootPart
-            	hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-				hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
-            end
-        end
-    end)
-end)
-
-game.Players.LocalPlayer.Chatted:Connect(function(ChatRe)
-	if ChatRe == "/e resolve" or "/e res" or "/e re" then
-	local RunService = game:GetService("RunService")
-		RunService.Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game.Players:GetChildren()) do
-					if v.Name ~= game.Players.LocalPlayer.Name then
-						local hrp = v.Character.HumanoidRootPart
-						hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-						hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
-					end
-				end
-			end)
-		end)
-	end
 end)
 
 game.Players.LocalPlayer.Chatted:Connect(function(ReV)
@@ -112,8 +82,26 @@ game.Players.LocalPlayer.Chatted:Connect(function(ReV)
 				for i,v in pairs(game.Players:GetChildren()) do
 					if v.Name ~= game.Players.LocalPlayer.Name then
 						local hrp = v.Character.HumanoidRootPart
-						hrp.Velocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)    
-						hrp.AssemblyLinearVelocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)   
+						hrp.Velocity = Vector3.new(intellect.Prediction, 0, intellect.Prediction)    
+						hrp.AssemblyLinearVelocity = Vector3.new(intellect.Prediction, 0, intellect.Prediction)   
+					end
+				end
+			end)
+		end)
+	end
+end)
+
+task.spawn(function()
+
+    while task.wait() do
+        local RunService = game:GetService("RunService")
+		RunService.Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game.Players:GetChildren()) do
+					if v.Name ~= game.Players.LocalPlayer.Name then
+						local hrp = v.Character.HumanoidRootPart
+						hrp.Velocity = Vector3.new(intellect.Prediction, 0, intellect.Prediction)    
+						hrp.AssemblyLinearVelocity = Vector3.new(intellect.Prediction, 0, intellect.Prediction)   
 					end
 				end
 			end)
