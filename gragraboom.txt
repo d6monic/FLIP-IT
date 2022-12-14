@@ -1,6 +1,6 @@
---[[Eclipse Soft aim]]
+--[[d6monic]]
 
---\\ Silent Aim 
+--\\ SA
 local Aiming = loadstring(game:HttpGet(("https://raw.githubusercontent.com/ftEclipse/Slient/main/SilentEclipseScript.Lua"), true))()
 Aiming.TeamCheck(false)
 
@@ -9,13 +9,13 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
-local EclipseSets = {
+local d6sets = {
     SilentAim = true,
     Prediction = 0.125443282, --[[0.133, 0.125443282 | best Predictions ]]
 }
 getgenv().EclipseSets = EclipseSets
 
---\\ AA Resolver
+--\\ AA RS
 RunService.Heartbeat:Connect(function()
     pcall(function()
         for i,v in pairs(game.Players:GetChildren()) do
@@ -32,10 +32,10 @@ function Aiming.Check()
     if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
         return false
     end
-
+    
     local Character = Aiming.Character(Aiming.Selected)
-    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
-    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+    local KOd = Character:WaitForChild"K.O".Value
+    local Grabbed = Character:FindFirstChild("WELD_GRAB") ~= nil
 
     if (KOd or Grabbed) then
         return false
