@@ -40,6 +40,15 @@ local DaHoodSettings = {
 getgenv().DaHoodSettings = DaHoodSettings
 
 
+mouse.KeyDown:Connect(function(key)
+    if key == "t" then
+        if DaHoodSettings.SilentAim == false then
+        DaHoodSettings.SilentAim = true
+        else
+        DaHoodSettings.SilentAim = false
+        end
+    end
+end)
 
 local GunSettings = {
 
@@ -102,53 +111,29 @@ end
 
 
 task.spawn(function()
-
     while task.wait() do
-
         if DaHoodSettings.Resolver and Aiming.Selected ~= nil and (Aiming.Selected.Character)  then
-
             local oldVel = game.Players[Aiming.Selected.Name].Character.HumanoidRootPart.Velocity
-
             game.Players[Aiming.Selected.Name].Character.HumanoidRootPart.Velocity = Vector3.new(oldVel.X, -0, oldVel.Z)
-
         end 
-
     end
-
 end)
-
-
 
 local Script = {Functions = {}}
 
-
-
 Script.Functions.getToolName = function(name)
-
     local split = string.split(string.split(name, "[")[2], "]")[1]
-
     return split
-
 end
 
-
-
 Script.Functions.getEquippedWeaponName = function(player)
-
    if (player.Character) and player.Character:FindFirstChildWhichIsA("Tool") then
-
       local Tool =  player.Character:FindFirstChildWhichIsA("Tool")
-
       if string.find(Tool.Name, "%[") and string.find(Tool.Name, "%]") and not string.find(Tool.Name, "Wallet") and not string.find(Tool.Name, "Phone") then 
-
          return Script.Functions.getToolName(Tool.Name)
-
       end
-
    end
-
    return nil
-
 end
 
 
