@@ -1,99 +1,32 @@
+--[[Eclipse Soft aim]]
 
-local Aiming = loadstring(game:HttpGet("https://pastebin.com/raw/3A9wdSkL"))()
-
+--\\ Silent Aim 
+local Aiming = loadstring(game:HttpGet(("https://raw.githubusercontent.com/ftEclipse/Slient/main/SilentEclipseScript.Lua"), true))()
 Aiming.TeamCheck(false)
 
-
-
 local Workspace = game:GetService("Workspace")
-
 local Players = game:GetService("Players")
-
 local RunService = game:GetService("RunService")
-
 local UserInputService = game:GetService("UserInputService")
 
-
-
-local LocalPlayer = Players.LocalPlayer
-
-local Mouse = LocalPlayer:GetMouse()
-
-local CurrentCamera = Workspace.CurrentCamera
-
-
-
-local DaHoodSettings = {
-
+local EclipseSets = {
     SilentAim = true,
-
-    AimLock = false,
-
-    Prediction = 0.1,
-
-    AimLockKeybind = Enum.KeyCode.E,
-
-    Resolver = true,
-
+    Prediction = 0.125443282, --[[0.133, 0.125443282 | best Predictions ]]
 }
+getgenv().EclipseSets = EclipseSets
 
-getgenv().DaHoodSettings = DaHoodSettings
-
-local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
-
-
-mouse.KeyDown:Connect(function(key)
-    if key == "t" then
-        if DaHoodSettings.SilentAim == false then
-        DaHoodSettings.SilentAim = true
-        else
-        DaHoodSettings.SilentAim = false
+--\\ AA Resolver
+RunService.Heartbeat:Connect(function()
+    pcall(function()
+        for i,v in pairs(game.Players:GetChildren()) do
+            if v.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = v.Character.HumanoidRootPart
+                 hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
+                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+            end
         end
-    end
+    end)
 end)
-
-local GunSettings = {
-
-    ["Double-Barrel SG"] = { --// dh
-
-        ["FOV"] = 25
-
-    },
-
-    ["Double Barrel SG"] = { --// dhm
-
-        ["FOV"] = 26.5
-
-    },
-
-    ["DoubleBarrel"] = { --// hood customs
-
-    ["FOV"] = 20
-
-    },
-
-    ["Revolver"] = {
-
-        ["FOV"] = 14.5
-
-    },
-
-    ["SMG"] = {
-
-        ["FOV"] = 6.5
-
-    },
-
-    ["Shotgun"] = {
-
-        ["FOV"] = 25
-
-    }
-
-}
-
-
 
 function Aiming.Check()
     if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
@@ -101,8 +34,8 @@ function Aiming.Check()
     end
 
     local Character = Aiming.Character(Aiming.Selected)
-    local KOd = Character:WaitForChild"K.O".Value
-    local Grabbed = Character:FindFirstChild("WELD_GRAB") ~= nil
+    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
+    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
 
     if (KOd or Grabbed) then
         return false
@@ -110,38 +43,6 @@ function Aiming.Check()
 
     return true
 end
-
-
-
-task.spawn(function()
-    while task.wait() do
-        if DaHoodSettings.Resolver and Aiming.Selected ~= nil and (Aiming.Selected.Character)  then
-            local oldVel = game.Players[Aiming.Selected.Name].Character.HumanoidRootPart.Velocity
-            game.Players[Aiming.Selected.Name].Character.HumanoidRootPart.Velocity = Vector3.new(oldVel.X, -0, oldVel.Z)
-        end 
-    end
-end)
-
-local Script = {Functions = {}}
-
-Script.Functions.getToolName = function(name)
-    local split = string.split(string.split(name, "[")[2], "]")[1]
-    return split
-end
-
-Script.Functions.getEquippedWeaponName = function(player)
-   if (player.Character) and player.Character:FindFirstChildWhichIsA("Tool") then
-      local Tool =  player.Character:FindFirstChildWhichIsA("Tool")
-      if string.find(Tool.Name, "%[") and string.find(Tool.Name, "%]") and not string.find(Tool.Name, "Wallet") and not string.find(Tool.Name, "Phone") then 
-         return Script.Functions.getToolName(Tool.Name)
-      end
-   end
-   return nil
-end
-
-
-
-
 
 local oldIndex = nil 
 oldIndex = hookmetamethod(game, "__index", function(self, Index)
@@ -162,44 +63,61 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
     return oldIndex(self, Index)
 end)
 
+
 RunService:BindToRenderStep("AimLock", 0, function()
-    if (DaHoodSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(DaHoodSettings.AimLockKeybind)) then
+    if (EclipseSets.AimLock and Aiming.Check() and UserInputService:IsKeyDown(EclipseSets.AimLockKeybind)) then
         local SelectedPart = Aiming.SelectedPart
 
-        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * EclipseSets.Prediction)
 
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
 end)
 
-RunService.RenderStepped:Connect(function()
-    local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-    local Value = tostring(ping)
-    local pingValue = Value:split(" ")
-    local PingNumber = pingValue[1]
-    DaHoodSettings.Prediction = PingNumber / 1000 
-end)
-
---// Spoof the Current Cheat
-local function ACThing()
-    for I, V in pairs(getgc(true)) do
-        if typeof(V) == "function" then
-            local sc = getfenv(V).script
-            if sc and sc.Name == "Camera" then
-                for I2, V2 in pairs(getupvalues(V)) do
-                    if type(V2) == "table" and rawget(V2, "DoThings") then
-                        rawset(V2, "Break", true)
-                        rawset(
-                            V2,
-                            "DoThings",
-                            function()
-                            end
-                        )
-                    end
-                end
+local RunService = game:GetService("RunService")
+--\\ AA Resolver (repeat btw) KEEP!!!!!
+RunService.Heartbeat:Connect(function()
+    pcall(function()
+        for i,v in pairs(game.Players:GetChildren()) do
+            if v.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = v.Character.HumanoidRootPart
+            	hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
+				hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
             end
         end
-    end
-end
-ACThing()
-game.Players.LocalPlayer.CharacterAdded:connect(ACThing)
+    end)
+end)
+
+game.Players.LocalPlayer.Chatted:Connect(function(ChatRe)
+	if ChatRe == "/e resolve" or "/e res" or "/e re" then
+	local RunService = game:GetService("RunService")
+		RunService.Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game.Players:GetChildren()) do
+					if v.Name ~= game.Players.LocalPlayer.Name then
+						local hrp = v.Character.HumanoidRootPart
+						hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
+						hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
+					end
+				end
+			end)
+		end)
+	end
+end)
+
+game.Players.LocalPlayer.Chatted:Connect(function(ReV)
+	if ReV == "/e resv2" or "/e rev2" or "/e v2" then
+	local RunService = game:GetService("RunService")
+		RunService.Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game.Players:GetChildren()) do
+					if v.Name ~= game.Players.LocalPlayer.Name then
+						local hrp = v.Character.HumanoidRootPart
+						hrp.Velocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)    
+						hrp.AssemblyLinearVelocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)   
+					end
+				end
+			end)
+		end)
+	end
+end)
