@@ -13,7 +13,7 @@ local d6sets = {
     SilentAim = true,
     Prediction = 0.125443282, --[[0.133, 0.125443282 | best Predictions ]]
 }
-getgenv().EclipseSets = EclipseSets
+getgenv().d6sets = d6sets
 
 --\\ AA RS
 RunService.Heartbeat:Connect(function()
@@ -65,17 +65,17 @@ end)
 
 
 RunService:BindToRenderStep("AimLock", 0, function()
-    if (EclipseSets.AimLock and Aiming.Check() and UserInputService:IsKeyDown(EclipseSets.AimLockKeybind)) then
+    if (d6sets.AimLock and Aiming.Check() and UserInputService:IsKeyDown(d6setsSets.AimLockKeybind)) then
         local SelectedPart = Aiming.SelectedPart
 
-        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * EclipseSets.Prediction)
+        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * d6sets.Prediction)
 
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
 end)
 
 local RunService = game:GetService("RunService")
---\\ AA Resolver (repeat btw) KEEP!!!!!
+--\\ AA RS (repeat btw) KEEP!!!!!
 RunService.Heartbeat:Connect(function()
     pcall(function()
         for i,v in pairs(game.Players:GetChildren()) do
@@ -113,8 +113,8 @@ game.Players.LocalPlayer.Chatted:Connect(function(ReV)
 				for i,v in pairs(game.Players:GetChildren()) do
 					if v.Name ~= game.Players.LocalPlayer.Name then
 						local hrp = v.Character.HumanoidRootPart
-						hrp.Velocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)    
-						hrp.AssemblyLinearVelocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)   
+						hrp.Velocity = Vector3.new(d6sets.Prediction, 0, d6sets.Prediction)    
+						hrp.AssemblyLinearVelocity = Vector3.new(d6sets.Prediction, 0, d6sets.Prediction)   
 					end
 				end
 			end)
