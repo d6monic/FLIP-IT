@@ -1,7 +1,7 @@
---[[d6monic]]
+--[[Six Soft aim]]
 
---\\ SA
-local Aiming = loadstring(game:HttpGet(("https://raw.githubusercontent.com/d6monic/FLIP-IT/main/hurry.txt"), true))()
+--\\ S A
+local Aiming = loadstring(game:HttpGet(("https://raw.githubusercontent.com/ftEclipse/Slient/main/SilentEclipseScript.Lua"), true))()
 Aiming.TeamCheck(false)
 
 local Workspace = game:GetService("Workspace")
@@ -9,11 +9,11 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
-local d6sets = {
+local EclipseSets = {
     SilentAim = true,
     Prediction = 0.125443282, --[[0.133, 0.125443282 | best Predictions ]]
 }
-getgenv().d6sets = d6sets
+getgenv().EclipseSets = EclipseSets
 
 --\\ AA RS
 RunService.Heartbeat:Connect(function()
@@ -32,7 +32,7 @@ function Aiming.Check()
     if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
         return false
     end
-    
+
     local Character = Aiming.Character(Aiming.Selected)
     local KOd = Character:WaitForChild"K.O".Value
     local Grabbed = Character:FindFirstChild("WELD_GRAB") ~= nil
@@ -51,7 +51,7 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
         if DaHoodSettings.SilentAim and Index == "Hit" or Index == "Target" then
             
             if SelectedPart then
-                local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+                local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * EclipseSets.Prediction)
                 if Index == "Hit" then
                     return Hit
                 elseif Index == "Target" then
@@ -63,12 +63,11 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
     return oldIndex(self, Index)
 end)
 
-
 RunService:BindToRenderStep("AimLock", 0, function()
-    if (d6sets.AimLock and Aiming.Check() and UserInputService:IsKeyDown(d6setsSets.AimLockKeybind)) then
+    if (EclipseSets.AimLock and Aiming.Check() and UserInputService:IsKeyDown(EclipseSets.AimLockKeybind)) then
         local SelectedPart = Aiming.SelectedPart
 
-        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * d6sets.Prediction)
+        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * EclipseSets.Prediction)
 
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
@@ -113,8 +112,8 @@ game.Players.LocalPlayer.Chatted:Connect(function(ReV)
 				for i,v in pairs(game.Players:GetChildren()) do
 					if v.Name ~= game.Players.LocalPlayer.Name then
 						local hrp = v.Character.HumanoidRootPart
-						hrp.Velocity = Vector3.new(d6sets.Prediction, 0, d6sets.Prediction)    
-						hrp.AssemblyLinearVelocity = Vector3.new(d6sets.Prediction, 0, d6sets.Prediction)   
+						hrp.Velocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)    
+						hrp.AssemblyLinearVelocity = Vector3.new(EclipseSets.Prediction, 0, EclipseSets.Prediction)   
 					end
 				end
 			end)
