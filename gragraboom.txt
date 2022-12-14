@@ -39,6 +39,9 @@ local DaHoodSettings = {
 
 getgenv().DaHoodSettings = DaHoodSettings
 
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+
 
 mouse.KeyDown:Connect(function(key)
     if key == "t" then
