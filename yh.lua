@@ -1,5 +1,3 @@
--- // xxa
-
 if getgenv().Aiming then return getgenv().Aiming end
 
 -- // Services
@@ -39,19 +37,38 @@ local tableinsert = table.insert
 getgenv().Aiming = {
     Enabled = true,
 
+    EnableKeybind = false,
+
+
+    UnderGroundResolver = true,
+    ResolverNotification = true,
+    KeybindResolver = "x",
+
+    Notify = false,
+
+    DetectDesync = true,
+    VelocityDetection = 70,
+
+    Notify = false,
+    Keybind = "v"
+
+    DetectAntilock = true,
+    VelocityDetection = 70,
+
+
     ShowFOV = false,
-    FOV = 8,
+    FOV = 119,
     FOVSides = 300,
-    FOVColour = Color3fromRGB(204, 0, 0),
+    FOVColour = Color3fromRGB(0, 0, 0),
 
     VisibleCheck = true,
     
-    HitChance = 85,
+    HitChance = 100,
 
     Selected = nil,
     SelectedPart = nil,
 
-    TargetPart = {"Head", "HumanoidRootPart", "UpperTorso", "LowerTorso", "RightFoot", "LeftFoot", "RightLeg", "RightLowerLeg", "RightUpperArm", "LeftUpperArm", "LeftUpperLeg", "RightUpperLeg", "LeftLeg", "LeftLowerLeg", "LeftArm", "RightArm", "RightLowerArm","LeftLowerArm", "LeftHand", "RightHand"},
+    TargetPart = {"Head", "UpperTorso", "HumanoidRootPart" "LowerTorso"},
 
     Ignored = {
         Teams = {
@@ -435,6 +452,5 @@ Heartbeat:Connect(function()
     Aiming.UpdateFOV()
     Aiming.GetClosestPlayerToCursor()
 end)
-
 -- //
 return Aiming
