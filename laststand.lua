@@ -82,7 +82,7 @@ RunService:BindToRenderStep("AimLock", 0, function()
         local pingValue = Value:split(" ")
         local PingNumber = pingValue[1]
         
-        DaHoodSettings.Prediction = PingNumber / 1000 + _G.PRED
+        DaHoodSettings.Prediction = PingNumber / 1000 
         
                         if Aiming.Character.Humanoid.Jump == true and AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
                         Aiming.TargetPart = "RightFoot"
