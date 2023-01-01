@@ -63,9 +63,9 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
 	end
 	return oldIndex(self, Index)
 end)
+
 -- // Keys
 local aimkey = "v"
-local rskey = "m"
 
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
@@ -79,16 +79,6 @@ mouse.KeyDown:Connect(function(key)
         end
     end
 end)
-
-mouse.KeyDown:Connect(function(key)
-    if key == rskey then
-    if getgenv().Resolver == true then
-        getgenv().Resolver = false
-    else
-        getgenv().Resolver = true
-    end
-    end
-    end)
 
 RunService.RenderStepped:Connect(function()
 
@@ -116,23 +106,4 @@ RunService.RenderStepped:Connect(function()
                     
                 end
 
-end)
-
---  \\    PASTED   \\ --
-
-local RunService = game:GetService("RunService")
-
-RunService.Heartbeat:Connect(function()
-    if getgenv().Resolver == true then
-    pcall(function()
-        for i,v in pairs(game.Players:GetChildren()) do
-            if v.Name ~= game.Players.LocalPlayer.Name then
-                local hrp = v.Character.HumanoidRootPart
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
-            end
-        end
-
-    end)
-end
 end)
