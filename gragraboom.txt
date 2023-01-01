@@ -64,22 +64,18 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
 	return oldIndex(self, Index)
 end)
 
--- // Keys
-local aimkey = "v"
-
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 
 mouse.KeyDown:Connect(function(key)
-    if key == aimkey then
-        if Aiming.Enabled == false then
-        Aiming.Enabled = true
+    if key == "v" then
+        if DaHoodSettings.SilentAim == false then
+        DaHoodSettings.SilentAim = true
         else
-        Aiming.Enabled = false
+        DaHoodSettings.SilentAim = false
         end
     end
 end)
-
 RunService.RenderStepped:Connect(function()
 
     local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
