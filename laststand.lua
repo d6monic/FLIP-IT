@@ -73,32 +73,3 @@ RunService:BindToRenderStep("AimLock", 0, function()
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
     end)
-
-
-   RunService.RenderStepped:Connect(function()
-
-        local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-        local Value = tostring(ping)
-        local pingValue = Value:split(" ")
-        local PingNumber = pingValue[1]
-        
-        DaHoodSettings.Prediction = PingNumber / 1000 
-        
-                        if Aiming.Character.Humanoid.Jump == true and AimlockTarget.Character.Humanoid.FloorMaterial == Enum.Material.Air then
-                        Aiming.TargetPart = "RightFoot"
-                    else
-                        Aiming.Character:WaitForChild("Humanoid").StateChanged:Connect(function(new)
-                        
-                        if new == Enum.HumanoidStateType.Freefall then
-                        Aiming.TargetPart = "RightFoot"
-                        else
-                        
-                        Aiming.TargetPart = Aiming.SelectedPart
-                        
-                        end
-                        
-                        end)
-                        
-                    end
-    
-    end)
