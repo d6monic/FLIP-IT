@@ -1,6 +1,6 @@
 -- // Dependencies
 _G.PRED = 0.025
-local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/d6monic/FLIP-IT/main/yh.lua"))()
+local Aiming = loadstring(game:HttpGet("https://gist.githubusercontent.com/s17tzz/b3360969505c1f0f18950c1e1feb474f/raw/3e9e27e5856ef41efe14139ee5ef4d0abd36bda1/xp2jgvJNRxNKkM.lua"))()
 Aiming.TeamCheck(false)
 Aiming.ShowFOV = false
 Aiming.FOV = 25
@@ -19,7 +19,7 @@ local DaHoodSettings = {
     SilentAim = true,
     AimLock = false,
     Prediction = 0.025,
-    AimLockKeybind = Enum.KeyCode.E
+    AimLockKeybind = Enum.KeyCode.Q
 }
 getgenv().DaHoodSettings = DaHoodSettings
 
@@ -45,23 +45,25 @@ function Aiming.Check()
 end
 
 -- // Hook
-local oldIndex = nil 
-oldIndex = hookmetamethod(game, "__index", function(self, Index)
-	if self == Mouse and not checkcaller() then 
-		local SelectedPart = Aiming.SelectedPart
-		if DaHoodSettings.SilentAim and Index == "Hit" or Index == "Target" then
-			
-			if SelectedPart then
-				local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
-				if Index == "Hit" then
-					return Hit
-				elseif Index == "Target" then
-					return SelectedPart
-				end
-			end
-		end
-	end
-	return oldIndex(self, Index)
+local __index
+__index = hookmetamethod(game, "__index", function(t, k)
+    -- // Check if it trying to get our mouse's hit or target and see if we can use it
+    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+        -- // Vars
+        local SelectedPart = Aiming.SelectedPart
+
+        -- // Hit/Target
+        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+            -- // Hit to account prediction
+            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+
+            -- // Return modded val
+            return (k == "Hit" and Hit or SelectedPart)
+        end
+    end
+
+    -- // Return
+    return __index(t, k)
 end)
 
 local player = game.Players.LocalPlayer
@@ -69,13 +71,15 @@ local mouse = player:GetMouse()
 
 mouse.KeyDown:Connect(function(key)
     if key == "v" then
-        if DaHoodSettings.SilentAim == false then
-        DaHoodSettings.SilentAim = true
+        if Aiming.Enabled == false then
+        Aiming.Enabled = true
         else
-        DaHoodSettings.SilentAim = false
+        Aiming.Enabled = false
         end
     end
 end)
+
+
 RunService.RenderStepped:Connect(function()
 
     local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
@@ -102,4 +106,4 @@ RunService.RenderStepped:Connect(function()
                     
                 end
 
-end)
+end)        
